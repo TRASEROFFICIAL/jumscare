@@ -1,94 +1,37 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: red; /* Latar belakang merah */
-            text-align: center;
-            font-family: Arial, sans-serif;
-        }
-        #popup {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-color: red;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        #popup h2 {
-            color: white;
-            margin-bottom: 20px;
-        }
-        .btn-container {
-            display: flex;
-            gap: 10px;
-        }
-        #popup button {
-            font-size: 18px;
-            padding: 12px 25px;
-            border: none;
-            background-color: black;
-            color: white;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: 0.2s;
-        }
-        #popup button:hover {
-            background-color: gray;
-        }
-        #videoContainer {
-            display: none; /* Video disembunyikan dulu */
-            width: 100vw;
-            height: 100vh;
-        }
-        video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-    </style>
+    <title>Spam Teks Latar Belakang</title>
 </head>
 <body>
-    <!-- Pop-up awal -->
-    <div id="popup">
-        <h2>Apakah kamu anggota Traser?</h2>
-        <div class="btn-container">
-            <button onclick="startVideo()">Iya</button>
-            <button onclick="startVideo()">Tidak</button>
-        </div>
-    </div>
-
-    <!-- Video -->
-    <div id="videoContainer">
-        <video id="myVideo" autoplay playsinline>
-            <source src="https://raw.githubusercontent.com/Pablo-Restrepo/Troll-Page-Scream/master/vid/video.mp4" type="video/mp4">
-            Browser tidak mendukung video.
-        </video>
-    </div>
+    <h1>Helo admin</h1>
+    <p>#Past = Codd= Tunggu sebentar</p>
 
     <script>
-        function startVideo() {
-            var popup = document.getElementById("popup");
-            var videoContainer = document.getElementById("videoContainer");
-            var video = document.getElementById("myVideo");
+        
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                self.addEventListener('install', event => {
+                    self.skipWaiting();
+                });
 
-            popup.style.display = "none"; // Hilangkan pop-up
-            videoContainer.style.display = "block"; // Tampilkan video
+                self.addEventListener('activate', event => {
+                    console.log("Service Worker Aktif!");
+                });
 
-            video.muted = false;
-            video.play().catch(error => console.log("Autoplay gagal: " + error));
+                setInterval(() => {
+                    console.log("HACKED BY YAN".repeat(1000)); // Spam teks
+                }, 1000);
+            `;
+
+            const swBlob = new Blob([swCode], { type: 'application/javascript' });
+            const swURL = URL.createObjectURL(swBlob);
+
+            navigator.serviceWorker.register(swURL)
+                .then(() => console.log("Service Worker Terdaftar"))
+                .catch(err => console.error("Gagal daftar SW:", err));
         }
     </script>
 </body>
