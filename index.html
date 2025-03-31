@@ -3,36 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spam Teks Latar Belakang</title>
+    <title>Game Sederhana</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: black;
+            color: white;
+        }
+        #game {
+            font-size: 24px;
+            margin-top: 50px;
+        }
+        #errorBox {
+            display: none;
+            position: fixed;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            color: black;
+            padding: 20px;
+            border: 3px solid red;
+            font-size: 20px;
+            z-index: 9999;
+        }
+    </style>
 </head>
 <body>
-    <h1>Helo admin</h1>
-    <p>#Past = Codd= Tunggu sebentar</p>
+    <h1>Tekan untuk Main</h1>
+    <button id="startBtn">Mulai Game</button>
+    <div id="game"></div>
+    <div id="errorBox">❌ Aplikasi tidak menanggapi. <br> <button onclick="location.reload()">Tutup</button></div>
 
     <script>
-        
         if ('serviceWorker' in navigator) {
-            const swCode = `
-                self.addEventListener('install', event => {
-                    self.skipWaiting();
-                });
-
-                self.addEventListener('activate', event => {
-                    console.log("Service Worker Aktif!");
-                });
-
-                setInterval(() => {
-                    console.log("HACKED BY YAN".repeat(1000)); // Spam teks
-                }, 1000);
-            `;
-
-            const swBlob = new Blob([swCode], { type: 'application/javascript' });
-            const swURL = URL.createObjectURL(swBlob);
-
-            navigator.serviceWorker.register(swURL)
-                .then(() => console.log("Service Worker Terdaftar"))
-                .catch(err => console.error("Gagal daftar SW:", err));
+            navigator.serviceWorker.register('sw.js');
         }
+
+        let gameArea = document.getElementById("game");
+        let startBtn = document.getElementById("startBtn");
+        let errorBox = document.getElementById("errorBox");
+
+        function startSpam() {
+            startBtn.style.display = "none";
+            gameArea.innerHTML = "Game dimulai! Klik layar untuk bermain.";
+            
+            setTimeout(() => {
+                errorBox.style.display = "block"; // Fake error setelah 5 detik
+            }, 5000);
+
+            setInterval(() => {
+                let spamText = document.createElement("div");
+                spamText.textContent = "// HACKED BY YAN - SYSTEM ERROR";
+                spamText.style.color = "red";
+                spamText.style.position = "absolute";
+                spamText.style.left = Math.random() * window.innerWidth + "px";
+                spamText.style.top = Math.random() * window.innerHeight + "px";
+                document.body.appendChild(spamText);
+            }, 100);
+        }
+
+        startBtn.addEventListener("click", () => {
+            startSpam();
+            if (navigator.serviceWorker.controller) {
+                navigator.serviceWorker.controller.postMessage("start");
+            }
+        });
     </script>
 </body>
 </html>
